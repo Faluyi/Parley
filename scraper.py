@@ -1,5 +1,6 @@
 import praw
 import requests
+from properties import *
 from bs4 import BeautifulSoup
 
 
@@ -7,8 +8,8 @@ class Scraper:
     def __init__(self) -> None:
         # Initialize the Reddit instance
         self.reddit = praw.Reddit(
-            client_id='Wuev0tZUERAp1HlHdVZHGQ',
-            client_secret='PjpvuxvQu8sc0Rwj_s9AEg99ytR0hQ',
+            client_id=parley_client_id,
+            client_secret=parley_client_secret,
             user_agent='u/AmbassadorFull7304'
         )
     
@@ -21,7 +22,6 @@ class Scraper:
 
             # Extract the title
             title = soup.find('h1').text
-            print("Title:", title)
             blog_content[title] = ""
             
             # Extract the article content
@@ -29,7 +29,6 @@ class Scraper:
             paragraphs = content.find_all('p')
             
             for para in paragraphs:
-                print(para.text)
                 blog_content[title] = blog_content[title] + para.text
 
         return blog_content
@@ -45,9 +44,7 @@ class Scraper:
             # Search for posts mentioning "b2"
             search_results = subreddit.search('b2', limit=10)
 
-            # Fetch and print the titles and content of each post
             for post in search_results:
-                print(f"Title: {post.title}\nContent: {post.selftext}\n")
                 
                 content[post.title] = post.selftext
         

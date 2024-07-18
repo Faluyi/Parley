@@ -1,13 +1,12 @@
-import os
-import random
-from openai import OpenAI, RateLimitError, OpenAIError
 import time
+from properties import *
+from openai import OpenAI, RateLimitError, OpenAIError
 
 class Generator:
     def __init__(self):
         # Initialize the OpenAI API client with the provided API key
         # api_key = "API-KEY" uncomment and insert the API key
-        self.client = OpenAI(api_key = "sk-proj-XOX5vmHAo6y8FbiuWF6OT3BlbkFJfP6tysmkkijxt51XDHdR")
+        self.client = OpenAI(api_key = parley_api_key)
 
         print("prompting AI model...")
         # Define a generic prompt for content generation
@@ -48,22 +47,28 @@ class Generator:
                             "content": prompt_with_placeholders,
                         }
                     ],
-                    "model": "gpt-3.5-turbo",
+                    "model": "gpt-3.5-turbo-0125",
                 }
                 print("AI model generating comment...")
                 response = self.client.chat.completions.create(**parameters)
                 print("Content successfully generated...")
                 # Extract the completion text from the response
                 completion_text = response.choices[0].message.content.strip()
-                
+
+                break
             except RateLimitError as e:
-                print(f"Rate limit exceeded, retrying in {2 ** i} seconds...")
+                
+                print(f"Rate limit exceeded, retrying in {2 ** i} seconds...", e)
                 time.sleep(2 ** i)
             except OpenAIError as e:
                 print(f"An error occurred: {e}")
                 break
+                
+        if completion_text:         
+            return completion_text
+        else:
+            return "Failed to generate comment due to repeated errors."
 
-        return completion_text
 
 
 def main():
@@ -101,70 +106,7 @@ def main():
             holder-data-demo
 
             For context, I'm trying to allow our application (which uploads data) to failover to `holder-data-demo-mirror` whenever US East is down, and have the data automatically sync back to `holder-data-demo` whenever it's back up.
-
-            Title: B2 Upload help!
-            Content: Howdy y'all i am using the B2 storage with typescript and currently have a "working" function for uploading using the api. The help i need is because it is currently using 'do_not_verify' for checksum. For some reason when calculating sha1 for a file the value i calculate doesn't survive on upload and i get
-
-                {
-                code: 'bad_request',
-                message: 'Checksum did not match data received',
-                status: 400
-                }
-
-            which could mean that my sha1 is bad however when a file with no data just a name is sent it goes though with: 
-
-                GOOD
-                {
-                accountId: -',
-                action: 'upload',
-                bucketId: '-',
-                contentLength: 0,
-                contentMd5: 'd41d8cd98f00b204e9800998ecf8427e',
-                contentSha1: 'da39a3ee5e6b4b0d3255bfef95601890afd80709',
-                contentType: 'text/plain',
-                fileId: '4_zbf7fc02cc2d2dde28fe40114_f415d8b5d983b4dfa_d20240509_m033242_c004_v0402022_t0058_u01715225562387',
-                fileInfo: {},
-                fileName: 'Y3KPuxI1lK7BjiQNZrkcv.txt',
-                fileRetention: {
-                    isClientAuthorizedToRead: true,
-                    value: { mode: null, retainUntilTimestamp: null }
-                },
-                legalHold: { isClientAuthorizedToRead: true, value: null },
-                serverSideEncryption: { algorithm: null, mode: null },
-                uploadTimestamp: 1715225562387
-                }
-
-            with the Sha1 always matching. so i was wondering if my files were getting corrupted in flight, also no, using do not verify it uploads fine.
-
-            Anyone experience anything similar?
-
-            https://pastebin.com/pYx6ybfg
-
-            Title: B2 Pricing
-            Content: Can anyone explain to me how $5/TB is breakeven cost for backblaze? From what I can tell breakeven is a lot closer to $1.50/TB on average.
-
-            Title: Backblaze B2 no longer free for first 10GB?
-            Content: I checked the pricing page and it seems to suggest a pay-as-you-go monthly fee is necessary. Previously there was mention that the first 10GB was free, but that has disappeared.
-
-            Edit: seems like it's available in the tooltips, so I guess that clears it up. If anyone from Backblaze is reading this, probably can consider improving UX to make the info available outside of a tooltip (it's neither searchable nor readable unless I hovered).
-
-            Title: Issue with Windows B2 Self-Contained CLI
-            Content: Hi guys,
-
-
-            I've been trying to adapt CORS rules to be allowed to access the B2 API from my browser. I am having trouble with the following official documentation: https://www.backblaze.com/docs/cloud-storage-enable-cors-with-the-cli.
-
-
-
-            I copied the command written in the documentation near the end of the page for Windows B2 Self-Contained CLI:  
-            `b2-windows.exe update-bucket --corsRules "[{\"corsRuleName\":\"downloadFromAnyOrigin\", \"allowedOrigins\": [\"https\"], \"allowedHeaders\": [\"range\"], \"allowedOperations\": [\"b2_download_file_by_id\", \"b2_download_file_by_name\"], \"exposeHeaders\": [\"x-bz-content-sha1\"], \"maxAgeSeconds\": 3600}]" bucketName allPublic`   
-
-            Where I changed the "update-bucket" into "bucket update" as per new requirements. I also renamed "bucketName" into the name of my bucket. After writing the command, the error I get is:
-
-            b2.exe bucket update: error: argument bucketType: invalid choice: 'corsRuleName\\\\:\\\\downloadFromAnyOrigin\\\\, \\\\allowedOrigins\\\\: \[\\\\https\\\\\], \\\\allowedHeaders\\\\: \[\\\\range\\\\\], \\\\allowedOperations\\\\: \[\\\\b2\_download\_file\_by\_id\\\\, \\\\b2\_download\_file\_by\_name\\\\\], \\\\exposeHeaders\\\\: \[\\\\x-bz-content-sha1\\\\\], \\\\maxAgeSeconds\\\\: 3600}\]' (choose from 'allPublic', 'allPrivate')
-
-
-            I don't know how to resolve this issue now and I'm stuck. I would be extremely grateful if someone could help me out with this. Thank you!"""
+"""
                     
     comment = generator.generate_content(blog_content, subreddit_content)
     
