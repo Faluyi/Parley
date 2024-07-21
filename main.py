@@ -9,16 +9,14 @@ from scraper import Scraper
 from ai_generator import Generator
 
 class BlogCommenter:
-    def __init__(self, chromedriver_path):
-        self.chromedriver_path = chromedriver_path
+    def __init__(self):
         self.driver = None
 
     def start_driver(self):
         # Create a Service object
-        service = Service(executable_path=self.chromedriver_path)
         
         # Initialize the WebDriver with the Service object
-        self.driver = webdriver.Chrome(service=service)
+        self.driver = webdriver.Chrome()
         
         # Maximize the browser window
         self.driver.maximize_window()
@@ -109,15 +107,13 @@ def main():
     scraper = Scraper()
     generator = Generator()
     
-    chromedriver_path = r"C:\Users\USER\Downloads\chromedriver-win64\chromedriver.exe"
-    commenter = BlogCommenter(chromedriver_path)
-    commenter.start_driver()
-    
+    commenter = BlogCommenter()
     blog_urls = ["https://www.backblaze.com/blog/ai-video-understanding-in-your-apps-with-twelve-labs-and-backblaze/", "https://www.backblaze.com/blog/announcing-event-notifications/"]
     subreddits = ['backblaze']
     scraped_content = scraper.scrape_and_merge_content(blog_urls, subreddits)
     
     comment = generator.generate_content(scraped_content["blog_content"], scraped_content["subreddit_content"])
+    commenter.start_driver()
     commenter.post_comment("Parley", "parley@gmail.com", comment)
     commenter.close_driver()
     

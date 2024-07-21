@@ -18,19 +18,26 @@ class Scraper:
         
         for url in urls:
             response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')
-
-            # Extract the title
-            title = soup.find('h1').text
-            blog_content[title] = ""
-            
-            # Extract the article content
-            content = soup.find('div')
-            paragraphs = content.find_all('p')
-            
-            for para in paragraphs:
-                blog_content[title] = blog_content[title] + para.text
-
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                # Extract the title
+                title_element = soup.find('h1')
+                title = title_element.text if title_element else "No Title"
+                blog_content[title] = ""
+                
+                # Extract the article content
+                content = soup.find('div')
+                if content:
+                    paragraphs = content.find_all('p')
+                    for para in paragraphs:
+                        blog_content[title] += para.text
+                else:
+                    blog_content[title] = "No content found"
+            else:
+                print(f"Failed to retrieve URL: {url}")
+                blog_content[url] = "Failed to retrieve content"
+                
         return blog_content
     
     
