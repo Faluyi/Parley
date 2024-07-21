@@ -36,6 +36,7 @@ Alternatively, open the project folder in the file explorer and double click the
 
 ## macOS
 chmod +x setup.sh
+
 ./setup.sh
 
 ### 3. Set up the environment variables
@@ -46,11 +47,13 @@ Alternatively, open the project folder in the file explorer and double click the
 
 ## For macOS
 chmod +x setup_env.sh
+
 ./setup_env.sh
 
 
 ## Usage
 To run the script, execute the main script file ("main.py).
+
 -python3 main.py
 
 
