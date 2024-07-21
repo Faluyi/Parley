@@ -60,13 +60,23 @@ To run the script, execute the main script file ("main.py).
 ## Project Structure
 
 README.md: This file, providing an overview of the project, setup instructions, and usage guidelines.
+
 requirements.txt: Lists dependencies required for the project.
+
 main.py: Contains the main script file implementing the CommentBot class and related functionalities.
+
 scraper.py: Handles the scraping logic for blogs and subreddits.
+
 ai_generator.py: Implements the generation of comments using OpenAI based on scraped content.
+
 properties.py: Configuration file storing API keys and other constants.
+
 env/: Directory containing the virtual environment setup.
+
 setup_env.bat: Batch file to set up environment variables for Windows users.
+
 setup_env.sh: Shell script to set up environment variables for macOS users.
+
 setup.bat: Batch file to install needed dependencies for Windows users.
+
 setup.sh: Shell script to install needed dependencies for macOS users.
