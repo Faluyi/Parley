@@ -1,6 +1,6 @@
 # Selenium Comment Bot with AI-Generated Comments
 
-This project automates the process of posting comments on blogs using Selenium. The bot scrapes content from blogs and subreddits, uses OpenAI to generate related comment content, and posts the generated comment on a specified blog URL.
+This project automates the process of posting comments on blogs using Selenium. The bot scrapes content from blogs and subreddits using BeautifulSoup, uses OpenAI to generate related comment content, and posts the generated comment on a specified blog URL.
 
 ## Features
 
@@ -16,6 +16,7 @@ This project automates the process of posting comments on blogs using Selenium. 
 - Praw
 - Openai
 - Selenium
+- BeautifulSoup
 
 ## Setup
 
